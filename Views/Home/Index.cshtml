@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "Collaboration Tool";
+}
+
+@if (ViewData["GoogleAuth"]!=null &&  ViewData["GoogleAuth"].ToString()== "true")
+{
+    
+    <!--google api sign in - for now there is sign in only.-->
+    <div class="text-center">
+        
+        <div id="g_id_onload"
+         data-client_id="@ViewData["GoogleClientID"]"
+         data-callback="onSignIn">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+        
+    </div>
+}
+<div class="text-center" id="Screen">
+    <h1 class="display-4">Welcome </h1>
+    
+    <div id="allText" class="chatView textarea text-start">&nbsp;</div>
+    
+    <label>text to submit: </label>
+    <input type="text" id="submitText" name="submitText" class="submitText text-start" />
+    <input type="button" onclick="    sendText();" onsubmit="sendText();" id="submitT" value="Send"  />
+    <div style="float:left" class="submitText"><label>username: </label>&nbsp;<input type="text" name="username" id="username" value=""/></div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+var enterTime = new Date().toLocaleString().replace(',', ''); // entering time to webpage
+ 
+   var AllTexturl = "@Url.Action("GetAllText")" + "?datetime=" + enterTime;
+function sendText() {
+    $.ajax({
+        type: "POST",
+        url: "@Url.Action("SendText")"+ "?submitText=" + $("#submitText").val() + "&username=" + $("#username").val()
+    }).done(function (res) {
+        
+        $("#submitText").val("");
+         getAllTextRequest();
+    });
+    
+    }
+    
+
+
+
+</script>
+
